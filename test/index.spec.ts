@@ -1,3 +1,5 @@
+// SyntaxError: The requested module 'itty-router' does not provide an export named 'Router'
+// at Runtime.linkAndEvaluateModule (node_modules/jest-runtime/build/index.js:779:5)
 import { handleRequest } from "@/index";
 
 test("should redirect to example page on no route match", async () => {
