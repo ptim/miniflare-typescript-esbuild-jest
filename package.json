@@ -8,6 +8,7 @@
     "build": "node build.js",
     "dev": "miniflare --live-reload --debug",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:debug": "node --inspect-brk --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand",
     "types:check": "tsc && tsc -p test/tsconfig.json"
   },
   "keywords": [],
