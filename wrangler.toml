@@ -11,7 +11,7 @@ compatibility_flags = []
 
 [durable_objects]
 bindings = [
-  { name = "COUNTER", class_name = "Counter" }
+  # { name = "COUNTER", class_name = "Counter" }
 ]
 
 [build]
