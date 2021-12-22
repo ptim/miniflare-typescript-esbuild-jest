@@ -6,7 +6,7 @@
   "module": "./dist/index.mjs",
   "scripts": {
     "build": "node build.js",
-    "dev": "miniflare --live-reload --debug",
+    "dev": "miniflare --no-cache --no-cf-fetch",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test:debug": "node --inspect-brk --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand",
     "types:check": "tsc && tsc -p test/tsconfig.json"
@@ -20,7 +20,7 @@
     "esbuild": "^0.14.7",
     "jest": "^27.3.1",
     "jest-environment-miniflare": "^2.0.0-rc.1",
-    "miniflare": "^2.0.0-rc.4",
+    "miniflare": "^2.0.0-rc.3",
     "prettier": "^2.4.1",
     "ts-jest": "^27.0.7",
     "typescript": "^4.4.4"
