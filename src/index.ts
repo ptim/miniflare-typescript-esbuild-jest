@@ -1,6 +1,6 @@
-import { Router } from "itty-router";
+// import { Router } from "itty-router";
 
-const router = Router();
+// const router = Router();
 
 /**
   [mf:err] GET /: TypeError: Failed to parse URL from [object Object]
@@ -12,8 +12,9 @@ const router = Router();
     at Server.<anonymous> (/Users/ptim/Documents/Projects/New-Atlas/source/miniflare-typescript-esbuild-jest/node_modules/@miniflare/http-server/src/index.ts:179:20)
 */
 export async function handleRequest(request: Request, env: Bindings) {
-  router.all("*", () => new Response("OK", { status: 200 }));
-  return router.handle(request, env);
+  // router.all("*", () => new Response("OK", { status: 200 }));
+  // return router.handle(request, env);
+  return new Response("OK");
 }
 
 const worker: ExportedHandler<Bindings> = { fetch: handleRequest };
