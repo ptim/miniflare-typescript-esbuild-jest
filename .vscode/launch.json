@@ -1,0 +1,41 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Miniflare (npm)",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "skipFiles": ["<node_internals>/**"]
+      // Collect a log file by setting trace: true in your launch.json, then upload it here.
+      // https://microsoft.github.io/vscode-pwa-analyzer/index.html
+      // via https://stackoverflow.com/questions/64589447/unbound-breakpoint-vs-code-chrome-angular
+      // "trace": true
+    },
+    {
+      "type": "node",
+      "name": "vscode-jest-tests",
+      "request": "launch",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "disableOptimisticBPs": true,
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "npm",
+      "args": ["test", "--", "--runInBand", "--watchAll=false"]
+    },
+    {
+      // https://jestjs.io/docs/troubleshooting
+      // node --inspect-brk --experimental-vm-modules node_modules/jest/bin/jest.js --verbose --runInBand
+      // https://miniflare.dev/developing/debugger#using-node
+      // node --experimental-vm-modules --inspect ./node_modules/miniflare/dist/src/cli.js dist/index.mjs --watch --debug
+      "type": "node",
+      "request": "attach",
+      "name": "Attach",
+      "port": 9229
+    }
+  ]
+}
