@@ -1,0 +1,9 @@
+{
+  "jest.jestCommandLine": "npm test --",
+  "jest.autoRun": {
+    // https://github.com/jest-community/vscode-jest/blob/master/README.md#autorun
+    // "watch": true, // comment to disable refreshing on source change
+    "onSave": "test-file", // always run on test file changed
+    "onStartup": [] // ["all-tests"],
+  }
+}
