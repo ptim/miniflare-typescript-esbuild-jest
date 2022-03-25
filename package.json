@@ -7,6 +7,7 @@
   "scripts": {
     "build": "node build.js",
     "dev": "miniflare --live-reload --debug",
+    "debug": "node --experimental-vm-modules --inspect ./node_modules/miniflare/dist/src/cli.js dist/index.mjs --watch --debug",
     "test": "npm run build && node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "types:check": "tsc && tsc -p test/tsconfig.json"
   },
