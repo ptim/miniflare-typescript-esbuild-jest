@@ -1,3 +1,4 @@
+type State = Record<number, ElementBones>;
 type ElementBones = {
   tagName: string;
   id: string;
@@ -6,26 +7,25 @@ type ElementBones = {
   skip: boolean;
 };
 
-let i = 0;
-let divs: Record<number, ElementBones> = {};
-
 const html = `
-  <!DOCTYPE html>
-  <body>
-    <h1>Hello World</h1>
+<!DOCTYPE html>
+<body>
+  <h1>Hello World</h1>
 
-    <div class="0 skip">skip</div>
-    <div class="1">a</div>
-    <div class="2">b</div>
-    <div class="3">c</div>
-  </body>
+  <div class="0 skip">skip</div>
+  <div class="1">a</div>
+  <div class="2">b</div>
+  <div class="3">c</div>
+
+  <hr style="display: none;" />
+</body>
 `;
 
-class Scraper extends HTMLRewriter {
+const createScraper = (state: State, i: number) => ({
   element(el: Element) {
     // scrape the element...
-    if (!divs[i])
-      divs[i] = {
+    if (!state[i])
+      state[i] = {
         tagName: el.tagName,
         id: el.getAttribute("id") ?? "",
         className: (el.getAttribute("class") ?? "").trim(),
@@ -35,40 +35,36 @@ class Scraper extends HTMLRewriter {
     console.log(`[1] ${i}: ${el.tagName}.${el.getAttribute("class") ?? "-"}`);
     // ...then remove it
     el.remove();
-  }
+  },
 
   text(text: Text) {
     // capture all the text iteratively
-    divs[i].textContent += text.text;
+    state[i].textContent += text.text;
     console.log(`[1] ${i}:    "${text.text}"`);
 
     // increment after capturing the last text node
     if (text.lastInTextNode) {
-      console.log(`[1] ${i}:    ${JSON.stringify(divs[i])}\n`);
+      console.log(`[1] ${i}:    ${JSON.stringify(state[i])}\n`);
       i++;
     }
-  }
-}
-class Writer extends HTMLRewriter {
+  },
+});
+
+const createWriter = (state: State, i: number) => ({
   element(el: Element) {
     console.log(`[2] ${i}: ${el.tagName}\n`);
 
     // 're-hydrate' our scraped elements, mutate to taste
-    const newDivs = Object.entries(divs)
+    const newDivs = Object.entries(state)
       .filter(([i, div]) => !div.skip)
       .map(
         ([i, { tagName, id, className, textContent }]) =>
           `<${tagName} id="${textContent}" class="${className}">${textContent}</${tagName}>`
       );
-    // append to the body as HTML
-    el.append(newDivs.join(""), { html: true });
-  }
-}
-
-// These handlers are only registered now, not executed. Order is respected
-const rewriter = new HTMLRewriter()
-  .on("div", new Scraper())
-  .on("body", new Writer());
+    // append to div#mount as HTML
+    el.after(newDivs.join(""), { html: true });
+  },
+});
 
 /**
  * I am trying to pull content (text) from an (element) and put it as id of the
@@ -81,6 +77,15 @@ export async function handleRequest(request: Request, env: Bindings) {
   const res = new Response(html, {
     headers: { "content-type": "text/html;charset=UTF-8" },
   });
+
+  let i = 0;
+  let state: State = {};
+
+  // These handlers are only registered now, not executed. Order is respected
+  const rewriter = new HTMLRewriter()
+    .on("div", createScraper(state, i))
+    .on("hr", createWriter(state, i));
+
   // the transform is executed here (obv!)
   const newres = rewriter.transform(res);
   return new Response(newres.body, res);
