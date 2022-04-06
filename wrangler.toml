@@ -23,3 +23,4 @@ main = "./index.mjs"
 
 [miniflare]
 durable_objects_persist = true
+upstream = "https://my-image-resizing-enabled.com"
