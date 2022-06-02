@@ -1,7 +1,11 @@
-import { handleRequest } from "@/index";
+import { Miniflare } from "miniflare";
 
-test("should redirect to example page on no route match", async () => {
-  const env = getMiniflareBindings();
-  const res = await handleRequest(new Request("http://localhost"), env);
-  expect(res.headers.get("location")).toEqual("http://redirected.dev/");
+test("should redirect", async () => {
+  const mf = new Miniflare({
+    scriptPath: "dist/index.mjs",
+    modules: true,
+  });
+
+  const result = await mf.dispatchFetch("http://localhost/");
+  expect(result.headers.get("location")).toEqual("http://redirected.dev/");
 });
