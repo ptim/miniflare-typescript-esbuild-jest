@@ -4,7 +4,11 @@ import {
 } from "@cloudflare/workers-honeycomb-logger";
 
 export async function handleRequest(request: Request, env: Bindings) {
-  return Response.redirect("http://redirected.dev", 302);
+  return new Response("OK", {
+    headers: new Headers({
+      "x-A": "foo",
+    }),
+  });
 }
 
 const handler = {

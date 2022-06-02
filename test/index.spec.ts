@@ -4,7 +4,7 @@ import { handleRequest } from "@/index";
 test("should redirect", async () => {
   const env = getMiniflareBindings();
   const res = await handleRequest(new Request("http://localhost"), env);
-  expect(res.headers.get("location")).toEqual("http://redirected.dev/");
+  expect(res.headers.get("x-A")).toEqual("foo");
 });
 
 test("should redirect (using mf.dispatchFetch)", async () => {
@@ -13,5 +13,5 @@ test("should redirect (using mf.dispatchFetch)", async () => {
     modules: true,
   });
   const res = await mf.dispatchFetch("http://localhost/");
-  expect(res.headers.get("location")).toEqual("http://redirected.dev/");
+  expect(res.headers.get("x-A")).toEqual("foo");
 });
